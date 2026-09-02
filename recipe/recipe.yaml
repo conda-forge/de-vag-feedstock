@@ -1,0 +1,47 @@
+schema_version: 1
+
+context:
+  name: de-vag
+  version: 0.1.0
+
+package:
+  name: ${{ name|lower }}
+  version: ${{ version }}
+
+source:
+  url: https://pypi.org/packages/source/${{ name[0] }}/${{ name }}/de-vag-${{ version }}.tar.gz
+  sha256: 488bc2b489de88b1f77bf607e7814ec175ecf9b39ff83197eb2d62570707f9fb
+
+build:
+  number: 2
+  noarch: python
+  script: ${{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation
+
+requirements:
+  host:
+    - python ${{ python_min }}.*
+    - pip
+    - poetry
+  run:
+    - python >=${{ python_min }}
+    - python-dateutil
+    - urllib3 >=1.25.3
+
+tests:
+  - python:
+      imports:
+        - deutschland.vag
+      pip_check: true
+      python_version:
+        - ${{ python_min }}
+        - "*"
+
+about:
+  summary: VAG API
+  license: Apache-2.0
+  license_file: LICENSE
+  homepage: https://github.com/bundesAPI/vag-api
+
+extra:
+  recipe-maintainers:
+    - jan-janssen
